@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>For My Cupcake ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 80%;
+            margin: 20px;
+            z-index: 1;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .heart {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 30px auto;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .heart::before, .heart::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 100px;
+            border-radius: 50px 50px 0 0;
+            background: linear-gradient(45deg, #ff6b6b, #ff4757);
+            left: 60px;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+        }
+
+        .heart::after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .message {
+            font-size: 32px;
+            color: #fff;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            margin: 30px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1.5s forwards 0.5s;
+            font-weight: bold;
+        }
+
+        .love-message {
+            font-size: 18px;
+            color: #fff;
+            margin: 20px 0;
+            line-height: 1.6;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .buttons {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            color: #e73c7e;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: buttonGlow 2s linear infinite;
+        }
+
+        @keyframes buttonGlow {
+            0% { transform: rotate(45deg) translateX(-100%); }
+            100% { transform: rotate(45deg) translateX(100%); }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            text-align: center;
+            z-index: 1000;
+            max-width: 90%;
+            width: 500px;
+        }
+
+        .modal h2 {
+            color: #e73c7e;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .modal p {
+            color: #333;
+            line-height: 1.8;
+            margin: 20px 0;
+            font-size: 18px;
+        }
+
+        .floating-hearts {
+            position: absolute;
+            pointer-events: none;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            pointer-events: none;
+            animation: confettiFall 4s linear infinite;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(720deg); }
+        }
+
+        .camera-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+        }
+
+        #camera-view {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .camera-buttons {
+            position: fixed;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 2001;
+        }
+
+        .camera-btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #e73c7e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .camera-btn:hover {
+            transform: scale(1.05);
+            background: white;
+        }
+
+        #captured-photo {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="heart"></div>
+        <div class="message">Will you be my Valentine?</div>
+        <div class="love-message">
+            Every moment with you makes my heart smile.<br>
+            Would you make this Valentine's Day special?
+        </div>
+        <div class="buttons">
+            <button class="btn" id="yesBtn">Yes!</button>
+            <button class="btn" id="noBtn">No</button>
+        </div>
+    </div>
+
+    <div class="modal" id="yesModal">
+        <h2>❤️ My Heart is Dancing! ❤️</h2>
+        <p>You've just made me the happiest person in the world! 🌹</p>
+        <p>I promise to make this Valentine's Day unforgettable, just like you.</p>
+        <p>Thank you for being the most amazing person in my life. ✨</p>
+        <p>I love you! ❤️</p>
+        <button class="btn" onclick="openCamera()">💝 Keep this moment forever 💝</button>
+    </div>
+
+    <div class="camera-container" id="camera-container">
+        <video id="camera-view" autoplay playsinline></video>
+        <img id="captured-photo" alt="Captured photo">
+        <div class="camera-buttons">
+            <button class="camera-btn" id="capture-btn">Capture Moment 📸</button>
+            <button class="camera-btn" id="retake-btn" style="display: none;">Retake ↺</button>
+            <button class="camera-btn" id="save-btn" style="display: none;">Save Memory 💖</button>
+            <button class="camera-btn" id="close-camera">Close ✖</button>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const modal = document.getElementById('yesModal');
+        let noBtnClickCount = 0;
+
+        noBtn.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+        });
+
+        noBtn.addEventListener('click', () => {
+            noBtnClickCount++;
+            if (noBtnClickCount >= 3) {
+                noBtn.style.display = 'none';
+            }
+        });
+
+        yesBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+            createConfetti();
+            createFloatingHearts();
+            document.querySelector('.container').style.display = 'none';
+        });
+
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    document.body.appendChild(confetti);
+
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 4000);
+                }, i * 50);
+            }
+        }
+
+        function createFloatingHearts() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = '❤️';
+                    heart.style.position = 'fixed';
+                    heart.style.left = `${Math.random() * 100}vw`;
+                    heart.style.top = '100vh';
+                    heart.style.fontSize = `${Math.random() * 20 + 10}px`;
+                    heart.style.animation = `float ${Math.random() * 4 + 4}s linear infinite`;
+                    document.body.appendChild(heart);
+
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 6000);
+                }, i * 300);
+            }
+        }
+
+        // Create initial floating hearts
+        setInterval(createFloatingHearts, 6000);
+
+        async function openCamera() {
+            const cameraContainer = document.getElementById('camera-container');
+            const cameraView = document.getElementById('camera-view');
+            const captureBtn = document.getElementById('capture-btn');
+            const retakeBtn = document.getElementById('retake-btn');
+            const saveBtn = document.getElementById('save-btn');
+            const closeBtn = document.getElementById('close-camera');
+            const capturedPhoto = document.getElementById('captured-photo');
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: "user" }, 
+                    audio: false 
+                });
+                cameraView.srcObject = stream;
+                cameraContainer.style.display = 'block';
+
+                captureBtn.onclick = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = cameraView.videoWidth;
+                    canvas.height = cameraView.videoHeight;
+                    canvas.getContext('2d').drawImage(cameraView, 0, 0);
+                    capturedPhoto.src = canvas.toDataURL('image/png');
+                    
+                    cameraView.style.display = 'none';
+                    capturedPhoto.style.display = 'block';
+                    captureBtn.style.display = 'none';
+                    retakeBtn.style.display = 'inline-block';
+                    saveBtn.style.display = 'inline-block';
+                };
+
+                retakeBtn.onclick = () => {
+                    cameraView.style.display = 'block';
+                    capturedPhoto.style.display = 'none';
+                    captureBtn.style.display = 'inline-block';
+                    retakeBtn.style.display = 'none';
+                    saveBtn.style.display = 'none';
+                };
+
+                saveBtn.onclick = () => {
+                    const link = document.createElement('a');
+                    link.download = 'valentine-moment.png';
+                    link.href = capturedPhoto.src;
+                    link.click();
+                };
+
+                closeBtn.onclick = () => {
+                    const tracks = stream.getTracks();
+                    tracks.forEach(track => track.stop());
+                    cameraContainer.style.display = 'none';
+                    cameraView.style.display = 'block';
+                    capturedPhoto.style.display = 'none';
+                    captureBtn.style.display = 'inline-block';
+                    retakeBtn.style.display = 'none';
+                    saveBtn.style.display = 'none';
+                };
+
+            } catch (err) {
+                alert('Please allow camera access to capture this beautiful moment! 📸');
+                console.error("Error accessing camera:", err);
+            }
+        }
+    </script>
+</body>
+</html>
